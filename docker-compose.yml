@@ -10,6 +10,8 @@ services:
     depends_on:
       order_db:
         condition: service_healthy
+    ports:
+      - 5000:8080
     environment:
       ASPNETCORE_URLS: "http://+8080"
       ConnectionStrings__DefaultConnection: "Host=order_db;Port=5432;Database=order_db;Username=postgres;Password=root"
@@ -27,6 +29,17 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/
       
+  paymentconsumer:
+    image: paymentconsumer
+    build:
+      context: .
+      dockerfile: src/PaymentConsumer/Dockerfile
+    ports:
+      - 5001:8080
+    environment:
+      ASPNETCORE_URLS: "http://+8080"
+
+
 volumes:
   pgdata:
     name: hello_rabbitmq_pgdata
