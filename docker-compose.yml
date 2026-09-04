@@ -1,0 +1,32 @@
+name: hello_rabbitmq
+
+services:
+
+  producer:
+    image: producer
+    build:
+      context: .
+      dockerfile: src/Producer/Dockerfile
+    depends_on:
+      order_db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_URLS: "http://+8080"
+      ConnectionStrings__DefaultConnection: "Host=order_db;Port=5432;Database=order_db;Username=postgres;Password=root"
+
+  order_db:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: order_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "order_db"]
+    volumes:
+      - pgdata:/var/lib/postgresql/
+      
+volumes:
+  pgdata:
+    name: hello_rabbitmq_pgdata
