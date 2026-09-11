@@ -2,6 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS publish
 WORKDIR /src
 COPY ["src/Producer/Producer.csproj", "Producer/"]
 COPY ["src/Shared/Shared.csproj", "Shared/"]
+COPY ["src/Infrastructure/Infrastructure.csproj", "Infrastructure/"]
 RUN dotnet restore "Producer/Producer.csproj"
 
 COPY ./src .

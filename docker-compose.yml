@@ -2,20 +2,6 @@ name: hello_rabbitmq
 
 services:
 
-  producer:
-    image: producer
-    build:
-      context: .
-      dockerfile: src/Producer/Dockerfile
-    depends_on:
-      order_db:
-        condition: service_healthy
-    ports:
-      - 5000:8080
-    environment:
-      ASPNETCORE_URLS: "http://+8080"
-      ConnectionStrings__DefaultConnection: "Host=order_db;Port=5432;Database=order_db;Username=postgres;Password=root"
-
   order_db:
     image: postgres:18
     environment:
@@ -27,19 +13,55 @@ services:
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres", "-d", "order_db"]
     volumes:
-      - pgdata:/var/lib/postgresql/
+      - pgdata:/var/lib/postgresql
+
+  rabbitmq:
+    image: rabbitmq:4.3.2-management
+    hostname: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+
+  producer:
+    image: producer
+    build:
+      context: .
+      dockerfile: src/Producer/Dockerfile
+    depends_on:
+      order_db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - 5000:8080
+    environment:
+      ASPNETCORE_URLS: "http://+8080"
+      ConnectionStrings__DefaultConnection: "Host=order_db;Port=5432;Database=order_db;Username=postgres;Password=root"
+      RabbitMq__HostName: "rabbitmq"
       
   paymentconsumer:
     image: paymentconsumer
     build:
       context: .
       dockerfile: src/PaymentConsumer/Dockerfile
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     ports:
       - 5001:8080
     environment:
       ASPNETCORE_URLS: "http://+8080"
-
+      RabbitMq__HostName: "rabbitmq"
 
 volumes:
   pgdata:
     name: hello_rabbitmq_pgdata
+  rabbitmqdata:
+    name: hello_rabbitmq_rabbitmqdata

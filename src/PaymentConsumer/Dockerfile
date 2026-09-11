@@ -2,6 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 COPY ["src/PaymentConsumer/PaymentConsumer.csproj", "PaymentConsumer/"]
 COPY ["src/Shared/Shared.csproj", "Shared/"]
+COPY ["src/Infrastructure/Infrastructure.csproj", "Infrastructure/"]
 RUN dotnet restore "PaymentConsumer/PaymentConsumer.csproj"
 
 COPY /src .
