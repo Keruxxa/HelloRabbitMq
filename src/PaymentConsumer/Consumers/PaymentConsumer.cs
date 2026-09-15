@@ -1,4 +1,5 @@
-﻿using RabbitMQ.Client;
+﻿using Infrastructure.Messaging.Contracts;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Shared.Events;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Text.Json;
 
 namespace PaymentConsumer.Consumers;
 
-public class PaymentConsumer(IConnection connection, ILogger<PaymentConsumer> logger) : BackgroundService
+public class PaymentConsumer(IChannelPool channelPool, ILogger<PaymentConsumer> logger) : BackgroundService
 {
     private IChannel? _channel;
 
@@ -40,7 +41,7 @@ public class PaymentConsumer(IConnection connection, ILogger<PaymentConsumer> lo
 
     private async Task DeclareExchangeAndQueue(CancellationToken cancellationToken)
     {
-        _channel = await connection.CreateChannelAsync(cancellationToken: cancellationToken);
+        _channel = await channelPool.GetChannelAsync(cancellationToken: cancellationToken);
 
         await _channel.ExchangeDeclareAsync(
             exchange: "orders.events",
