@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 
 namespace Infrastructure.Messaging;
 
-public class ChannelPool(IRabbitMqConnection rabbitMqConnection) : IChannelPool
+public sealed class ChannelPool(IRabbitMqConnection rabbitMqConnection) : IChannelPool, IAsyncDisposable
 {
     private readonly ConcurrentBag<IChannel> _channels = new();
 
@@ -32,6 +32,14 @@ public class ChannelPool(IRabbitMqConnection rabbitMqConnection) : IChannelPool
             _channels.Add(channel);
         }
         else
+        {
+            await channel.DisposeAsync();
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        while (_channels.TryTake(out var channel))
         {
             await channel.DisposeAsync();
         }

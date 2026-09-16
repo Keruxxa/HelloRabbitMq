@@ -10,13 +10,20 @@ public class RabbitMqMessageSender(IChannelPool channelPool, IMessageRouter mess
     {
         var channel = await channelPool.GetChannelAsync(cancellationToken);
 
-        var body = JsonSerializer.SerializeToUtf8Bytes(message);
-        var route = messageRouter.GetRoute(message);
+        try
+        {
+            var body = JsonSerializer.SerializeToUtf8Bytes(message);
+            var route = messageRouter.GetRoute(message);
 
-        await channel.BasicPublishAsync(
-            exchange: route.Exchange,
-            routingKey: route.RoutingKey,
-            body: body,
-            cancellationToken);
+            await channel.BasicPublishAsync(
+                exchange: route.Exchange,
+                routingKey: route.RoutingKey,
+                body: body,
+                cancellationToken);
+        }
+        finally
+        {
+            await channelPool.Return(channel);
+        }
     }
 }

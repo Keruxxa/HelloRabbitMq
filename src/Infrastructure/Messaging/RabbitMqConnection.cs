@@ -5,8 +5,9 @@ using Shared.Infrastructure.Options;
 
 namespace Infrastructure.Messaging;
 
-public class RabbitMqConnection(IOptions<RabbitMq> options) : IRabbitMqConnection, IAsyncDisposable
+public sealed class RabbitMqConnection(IOptions<RabbitMq> options) : IRabbitMqConnection, IAsyncDisposable
 {
+    private readonly SemaphoreSlim _connectionLock = new(1, 1);
     private IConnection? _connection;
 
     public async Task<IConnection> GetConnectionAsync()
@@ -16,18 +17,32 @@ public class RabbitMqConnection(IOptions<RabbitMq> options) : IRabbitMqConnectio
             return _connection;
         }
 
-        var rabbitMq = options.Value;
+        await _connectionLock.WaitAsync();
 
-        var factory = new ConnectionFactory
+        try
         {
-            HostName = rabbitMq.HostName,
-            UserName = rabbitMq.UserName,
-            Password = rabbitMq.Password,
-        };
+            if (_connection is not null)
+            {
+                return _connection;
+            }
 
-        _connection = await factory.CreateConnectionAsync();
+            var rabbitMq = options.Value;
 
-        return _connection;
+            var factory = new ConnectionFactory
+            {
+                HostName = rabbitMq.HostName,
+                UserName = rabbitMq.UserName,
+                Password = rabbitMq.Password,
+            };
+
+            _connection = await factory.CreateConnectionAsync();
+
+            return _connection;
+        }
+        finally
+        {
+            _connectionLock.Release();
+        }
     }
 
     public async ValueTask DisposeAsync()
@@ -36,5 +51,7 @@ public class RabbitMqConnection(IOptions<RabbitMq> options) : IRabbitMqConnectio
         {
             await _connection.DisposeAsync();
         }
+
+        _connectionLock.Dispose();
     }
 }
