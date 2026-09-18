@@ -5,7 +5,8 @@
       "commandVersion": "1.0",
       "serviceActions": {
         "producer": "StartDebugging",
-        "paymentconsumer": "StartDebugging"
+        "paymentconsumer": "StartDebugging",
+        "notification_consumer": "StartDebugging"
       }
     }
   }

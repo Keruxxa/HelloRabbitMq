@@ -60,6 +60,20 @@ services:
       ASPNETCORE_URLS: "http://+8080"
       RabbitMq__HostName: "rabbitmq"
 
+  notification_consumer:
+    image: notification_consumer
+    build:
+      dockerfile: src/NotificationConsumer/Dockerfile
+      context: .
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - 5083:8080
+    environment:
+      ASPNETCORE_URLS: "http://+8080"
+      RabbitMq__HostName: "rabbitmq"
+
 volumes:
   pgdata:
     name: hello_rabbitmq_pgdata
