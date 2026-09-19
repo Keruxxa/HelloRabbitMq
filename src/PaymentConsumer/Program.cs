@@ -8,8 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRabbitMq(builder.Configuration, routerBuilder =>
 {
-    routerBuilder.MessagesConfig = new PaymentMessagesConfig();
-    routerBuilder.TopologyConfigurator = typeof(PaymentTopologyConfigurator);
+    routerBuilder.SetMessagesConfig<PaymentMessagesConfig>();
+    routerBuilder.SetTopologyConfigurator<PaymentTopologyConfigurator>();
 });
 
 builder.Services.AddRabbitMqConsumer<OrderCreatedEvent, PaymentConsumerService>(options =>

@@ -9,14 +9,14 @@ builder.Services.AddRabbitMq(builder.Configuration);
 
 builder.Services.AddRabbitMqConsumer<OrderCreatedEvent, OrderCreatedNotificationConsumer>(options =>
 {
-    options.Exchange = "order.events";
+    options.Exchange = "orders.events";
     options.Queue = "notifications";
     options.Type = ExchangeType.Topic;
 });
 
 builder.Services.AddRabbitMqConsumer<OrderPaidEvent, OrderPaidNotificationConsumer>(options =>
 {
-    options.Exchange = "order.events";
+    options.Exchange = "orders.events";
     options.Queue = "notifications";
     options.Type = ExchangeType.Topic;
 });

@@ -11,10 +11,10 @@ builder.Services.AddDbContext<OrderDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddRabbitMq(builder.Configuration, options =>
+builder.Services.AddRabbitMq(builder.Configuration, routerBuilder =>
 {
-    options.MessagesConfig = new MessagesConfig();
-    options.TopologyConfigurator = typeof(TopologyConfigurator);
+    routerBuilder.SetMessagesConfig<MessagesConfig>();
+    routerBuilder.SetTopologyConfigurator<TopologyConfigurator>();
 });
 
 builder.Services.AddHostedService<OrderProducer>();

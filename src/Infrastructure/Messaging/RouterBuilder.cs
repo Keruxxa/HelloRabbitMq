@@ -1,16 +1,17 @@
 ﻿using Infrastructure.Messaging.Contracts;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.Messaging;
 
-public class RouterBuilder
+public class RouterBuilder(IServiceCollection services) : IRouterBuilder
 {
-    /// <summary>
-    ///     Defines exchanges, queues and binds them
-    /// </summary>
-    public Type TopologyConfigurator { get; set; } = typeof(ITopologyConfigurator);
+    public void SetMessagesConfig<TConfig>() where TConfig : class, IMessagesConfig
+    {
+        services.AddSingleton<IMessagesConfig, TConfig>();
+    }
 
-    /// <summary>
-    ///     Maps event types to their routes
-    /// </summary>
-    public IMessagesConfig MessagesConfig { get; set; } = new DefaultMessageConfig();
+    public void SetTopologyConfigurator<TConfigurator>() where TConfigurator : class, ITopologyConfigurator
+    {
+        services.AddSingleton<ITopologyConfigurator, TConfigurator>();
+    }
 }

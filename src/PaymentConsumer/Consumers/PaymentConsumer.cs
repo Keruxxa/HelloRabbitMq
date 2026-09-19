@@ -7,10 +7,12 @@ public class PaymentConsumer(IMessageSender messageSender, ILogger<PaymentConsum
 {
     public async Task ConsumeAsync(OrderCreatedEvent message, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Order was paid successfully. Id: {OrderId}", message.Id);
+        logger.LogInformation("Paying order. Id: {OrderId}", message.Id);
 
         await Task.Delay(Random.Shared.Next(100, 500), cancellationToken);
 
         await messageSender.SendAsync(new OrderPaidEvent(message.Id), cancellationToken);
+
+        logger.LogInformation("Order payment completed. OrderId: {OrderId}", message.Id);
     }
 }

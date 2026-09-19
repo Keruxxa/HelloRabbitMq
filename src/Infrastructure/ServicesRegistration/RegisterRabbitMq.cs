@@ -8,38 +8,33 @@ namespace Infrastructure.ServicesRegistration;
 
 public static class RegisterRabbitMq
 {
+    /// <summary>
+    ///     Registers RabbitMQ
+    /// </summary>
     /// <remarks>
-    ///     <c>Note:</c> If you provide <paramref name="configureRouterBuilder"/>, you have to configure both <see cref="RouterBuilder.MessagesConfig"/> and <see cref="RouterBuilder.TopologyConfigurator"/>
+    ///     <para>
+    ///         <paramref name="configureRouterBuilder"/> must be provided to define routes in order to use <see cref="IMessageSender"/>
+    ///     </para>
+    ///     <para>
+    ///         <c>Note:</c> If you provide <paramref name="configureRouterBuilder"/>, you have to call both <see cref="RouterBuilder.SetMessagesConfig"/> and <see cref="RouterBuilder.SetTopologyConfigurator"/>
+    ///     </para>
     /// </remarks>
     public static IServiceCollection AddRabbitMq(
         this IServiceCollection services,
         IConfiguration configuration,
-        Action<RouterBuilder>? configureRouterBuilder = null)
+        Action<IRouterBuilder>? configureRouterBuilder = null)
     {
-        var routerBuilder = configureRouterBuilder is null
-            ? null
-            : ConfigureRouterBuilder(configureRouterBuilder);
+        services.AddSingleton<IMessagesConfig, DefaultMessageConfig>();
+        services.AddSingleton<IMessageRouter, MessageRouter>();
 
         services.AddSingleton<IRabbitMqConnection, RabbitMqConnection>();
         services.AddSingleton<IChannelPool, ChannelPool>();
         services.AddTransient<IMessageSender, RabbitMqMessageSender>();
 
-        services.AddSingleton<IMessageRouter, MessageRouter>(_ =>
+        if (configureRouterBuilder is not null)
         {
-            var messageRouter = new MessageRouter();
-
-            if (routerBuilder is not null)
-            {
-                messageRouter.SetMessagesConfig(routerBuilder.MessagesConfig);
-            }
-
-            return messageRouter;
-        });
-
-        if (routerBuilder is not null)
-        {
-            services.AddSingleton(typeof(ITopologyConfigurator), routerBuilder.TopologyConfigurator);
-            services.AddHostedService<TopologyConfiguratorHostedService>();
+            var routerBuilder = new RouterBuilder(services);
+            configureRouterBuilder(routerBuilder);
         }
 
         ConfigureSection(services, configuration);
@@ -61,19 +56,6 @@ public static class RegisterRabbitMq
         services.AddHostedService<RabbitMqConsumerHostedService<TMessage>>();
 
         return services;
-    }
-
-    private static RouterBuilder ConfigureRouterBuilder(Action<RouterBuilder> configureRouterBuilder)
-    {
-        var routerBuilder = new RouterBuilder();
-        configureRouterBuilder.Invoke(routerBuilder);
-
-        if (!routerBuilder.TopologyConfigurator.IsAssignableTo(typeof(ITopologyConfigurator)))
-        {
-            throw new ArgumentException($"{nameof(RouterBuilder.TopologyConfigurator)} type must be assignable to {nameof(ITopologyConfigurator)}");
-        }
-
-        return routerBuilder;
     }
 
     private static void ConfigureSection(IServiceCollection services, IConfiguration configuration)

@@ -4,5 +4,7 @@ namespace Infrastructure.Messaging;
 
 public class DefaultMessageConfig : IMessagesConfig
 {
-    public Dictionary<Type, RouteInfo> Routes => [];
+    private readonly Dictionary<Type, RouteInfo> _routes = [];
+
+    public Dictionary<Type, RouteInfo> Routes => _routes;
 }
