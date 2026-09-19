@@ -22,7 +22,7 @@ public class OrderProducer(IServiceScopeFactory serviceScopeFactory) : Backgroun
 
             await messageSender.SendAsync(new OrderCreatedEvent(order.Id), stoppingToken);
 
-            await Task.Delay(Random.Shared.Next(50, 100), stoppingToken);
+            await Task.Delay(Random.Shared.Next(300, 500), stoppingToken);
         }
     }
 }
