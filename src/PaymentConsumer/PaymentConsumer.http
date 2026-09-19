@@ -1,6 +1,0 @@
-@PaymentConsumer_HostAddress = http://localhost:5147
-
-GET {{PaymentConsumer_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

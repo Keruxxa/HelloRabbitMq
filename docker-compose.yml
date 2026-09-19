@@ -46,11 +46,11 @@ services:
       ConnectionStrings__DefaultConnection: "Host=order_db;Port=5432;Database=order_db;Username=postgres;Password=root"
       RabbitMq__HostName: "rabbitmq"
       
-  paymentconsumer:
-    image: paymentconsumer
+  payment_service:
+    image: payment_service
     build:
       context: .
-      dockerfile: src/PaymentConsumer/Dockerfile
+      dockerfile: src/PaymentService/Dockerfile
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -60,10 +60,10 @@ services:
       ASPNETCORE_URLS: "http://+8080"
       RabbitMq__HostName: "rabbitmq"
 
-  notification_consumer:
-    image: notification_consumer
+  notification_service:
+    image: notification_service
     build:
-      dockerfile: src/NotificationConsumer/Dockerfile
+      dockerfile: src/NotificationService/Dockerfile
       context: .
     depends_on:
       rabbitmq:
