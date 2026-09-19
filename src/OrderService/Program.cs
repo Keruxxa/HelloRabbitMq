@@ -1,4 +1,5 @@
 using HelloRabbitMq.Db;
+using HelloRabbitMq.Endpoints;
 using HelloRabbitMq.Messaging;
 using HelloRabbitMq.Producers;
 using Infrastructure.ServicesRegistration;
@@ -20,5 +21,7 @@ builder.Services.AddRabbitMq(builder.Configuration, routerBuilder =>
 builder.Services.AddHostedService<OrderProducer>();
 
 var app = builder.Build();
+
+app.MapOrderEndpoints();
 
 app.Run();

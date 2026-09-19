@@ -29,11 +29,11 @@ services:
     volumes:
       - rabbitmqdata:/var/lib/rabbitmq
 
-  producer:
-    image: producer
+  order_service:
+    image: order_service
     build:
       context: .
-      dockerfile: src/Producer/Dockerfile
+      dockerfile: src/OrderService/Dockerfile
     depends_on:
       order_db:
         condition: service_healthy

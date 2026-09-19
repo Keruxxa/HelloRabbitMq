@@ -4,7 +4,7 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "producer": "StartDebugging",
+        "order_service": "StartDebugging",
         "paymentconsumer": "StartDebugging",
         "notification_consumer": "StartDebugging"
       }

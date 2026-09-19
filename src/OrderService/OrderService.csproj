@@ -19,7 +19,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\OrderService.Contracts\OrderService.Contracts.csproj" />
       <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+      <ProjectReference Include="..\OrderService.Contracts\OrderService.Contracts.csproj" />
       <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 
