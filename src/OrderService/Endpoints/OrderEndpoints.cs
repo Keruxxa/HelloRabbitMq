@@ -1,10 +1,10 @@
-﻿using HelloRabbitMq.Db;
-using HelloRabbitMq.Models;
+﻿using OrderService.Db;
+using OrderService.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using OrderService.Contracts.Dto;
 
-namespace HelloRabbitMq.Endpoints;
+namespace OrderService.Endpoints;
 
 public static class OrderEndpoints
 {

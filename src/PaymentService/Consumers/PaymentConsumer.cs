@@ -1,7 +1,7 @@
 ﻿using Infrastructure.Messaging.Contracts;
 using Shared.Events;
 
-namespace PaymentConsumer.Consumers;
+namespace PaymentService.Consumers;
 
 public class PaymentConsumer(IMessageSender messageSender, ILogger<PaymentConsumer> logger) : IMessageConsumer<OrderCreatedEvent>
 {

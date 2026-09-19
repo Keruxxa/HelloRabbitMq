@@ -1,7 +1,7 @@
 ﻿using Infrastructure.Messaging.Contracts;
 using RabbitMQ.Client;
 
-namespace PaymentConsumer.Messaging;
+namespace PaymentService.Messaging;
 
 public class PaymentTopologyConfigurator(IChannelPool channelPool) : ITopologyConfigurator
 {

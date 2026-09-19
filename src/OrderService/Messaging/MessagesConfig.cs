@@ -1,7 +1,7 @@
 ﻿using Infrastructure.Messaging.Contracts;
 using Shared.Events;
 
-namespace HelloRabbitMq.Messaging;
+namespace OrderService.Messaging;
 
 public class MessagesConfig : IMessagesConfig
 {

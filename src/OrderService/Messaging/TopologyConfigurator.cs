@@ -1,7 +1,7 @@
 ﻿using Infrastructure.Messaging.Contracts;
 using RabbitMQ.Client;
 
-namespace HelloRabbitMq.Messaging;
+namespace OrderService.Messaging;
 
 public class TopologyConfigurator(IChannelPool channelPool) : ITopologyConfigurator
 {

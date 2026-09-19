@@ -1,7 +1,7 @@
 ﻿using Infrastructure.Messaging.Contracts;
 using Shared.Events;
 
-namespace PaymentConsumer.Messaging;
+namespace PaymentService.Messaging;
 
 public class PaymentMessagesConfig : IMessagesConfig
 {

@@ -1,4 +1,4 @@
-﻿namespace HelloRabbitMq.Models;
+﻿namespace OrderService.Models;
 
 public class Order(Guid userId, double price)
 {

@@ -1,7 +1,7 @@
-using HelloRabbitMq.Db;
-using HelloRabbitMq.Endpoints;
-using HelloRabbitMq.Messaging;
-using HelloRabbitMq.Producers;
+using OrderService.Db;
+using OrderService.Endpoints;
+using OrderService.Messaging;
+using OrderService.Producers;
 using Infrastructure.ServicesRegistration;
 using Microsoft.EntityFrameworkCore;
 

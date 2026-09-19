@@ -1,4 +1,4 @@
-﻿namespace HelloRabbitMq.Models;
+﻿namespace OrderService.Models;
 
 public enum OrderStatus
 {

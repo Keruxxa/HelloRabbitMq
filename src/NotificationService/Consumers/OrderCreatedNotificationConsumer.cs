@@ -1,7 +1,7 @@
 ﻿using Infrastructure.Messaging.Contracts;
 using Shared.Events;
 
-namespace NotificationConsumer.Consumers;
+namespace NotificationService.Consumers;
 
 public class OrderCreatedNotificationConsumer(ILogger<OrderCreatedNotificationConsumer> logger) : IMessageConsumer<OrderCreatedEvent>
 {

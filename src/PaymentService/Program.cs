@@ -1,8 +1,8 @@
 using Infrastructure.ServicesRegistration;
-using PaymentConsumer.Messaging;
+using PaymentService.Consumers;
+using PaymentService.Messaging;
 using RabbitMQ.Client;
 using Shared.Events;
-using PaymentConsumerService = PaymentConsumer.Consumers.PaymentConsumer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +12,7 @@ builder.Services.AddRabbitMq(builder.Configuration, routerBuilder =>
     routerBuilder.SetTopologyConfigurator<PaymentTopologyConfigurator>();
 });
 
-builder.Services.AddRabbitMqConsumer<OrderCreatedEvent, PaymentConsumerService>(options =>
+builder.Services.AddRabbitMqConsumer<OrderCreatedEvent, PaymentConsumer>(options =>
 {
     options.Exchange = "orders.events";
     options.Queue = "payments";

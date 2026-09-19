@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace HelloRabbitMq.Migrations
+namespace OrderService.Migrations
 {
     /// <inheritdoc />
     public partial class Add_Order : Migration

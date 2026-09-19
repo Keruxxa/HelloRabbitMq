@@ -1,9 +1,9 @@
-﻿using HelloRabbitMq.Db;
-using HelloRabbitMq.Models;
+﻿using OrderService.Db;
+using OrderService.Models;
 using Infrastructure.Messaging.Contracts;
 using Shared.Events;
 
-namespace HelloRabbitMq.Producers;
+namespace OrderService.Producers;
 
 public class OrderProducer(IServiceScopeFactory serviceScopeFactory) : BackgroundService
 {

@@ -1,5 +1,5 @@
 using Infrastructure.ServicesRegistration;
-using NotificationConsumer.Consumers;
+using NotificationService.Consumers;
 using RabbitMQ.Client;
 using Shared.Events;
 

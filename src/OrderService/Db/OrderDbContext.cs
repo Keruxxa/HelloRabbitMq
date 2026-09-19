@@ -1,7 +1,7 @@
-﻿using HelloRabbitMq.Models;
+﻿using OrderService.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace HelloRabbitMq.Db;
+namespace OrderService.Db;
 
 public class OrderDbContext(DbContextOptions<OrderDbContext> options) : DbContext(options)
 {
